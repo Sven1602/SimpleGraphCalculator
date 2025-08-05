@@ -1,12 +1,12 @@
 ﻿using OxyPlot;
 using System.Windows.Input;
-using LibrarySimpleGraphCalculator;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Windows;
 using SimpleGraphCalculator;
 using System.Linq;
 using System;
+using LibrarySimpleGraphCalculator;
 
 namespace CsvImportReview
 {
@@ -89,8 +89,6 @@ namespace CsvImportReview
         ~MainViewModel()
         {
         }
-
-        public PlotModel ChartModel { get; private set; }
 
         public ObservableCollection<string> Units
         {

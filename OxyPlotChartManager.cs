@@ -27,22 +27,56 @@ namespace SimpleGraphCalculator
 
         public PlotModel ChartModel { get; private set; }
 
-        public void exportChartToSvg(string FilePath, int width, int height)
+        public ChartErrorCode exportChartToSvg(string FilePath, int width, int height)
         {
-            using (var stream = File.Create(FilePath))
+            if (!string.IsNullOrEmpty(FilePath))
             {
-                var exporter = new SvgExporter { Width = width, Height = height };
-                exporter.Export(ChartModel, stream);
+                using (var stream = File.Create(FilePath))
+                {
+                    var exporter = new SvgExporter { Width = width, Height = height };
+                    exporter.Export(ChartModel, stream);
+                }
             }
+            else
+            {
+                return ChartErrorCode.filePathNotFound;
+            }
+
+            return ChartErrorCode.ok;
         }
 
-        public void UpdateChart(string name, ChartData chartData)
+        public ChartErrorCode UpdateChart(string name, ChartData chartData)
         {
-            this.ChartModel.Series.Clear();
-            this.ChartModel.Title = name;
-            this.ChartModel.Series.Add(new FunctionSeries(chartData.Function, chartData.MinXValue, chartData.MaxXValue, chartData.RadIncrement));
+            if(ChartModel != null)
+            {
+                if (!string.IsNullOrEmpty(name) && chartData != null)
+                {
+                    this.ChartModel.Series.Clear();
+                    this.ChartModel.Title = name;
+                    this.ChartModel.Series.Add(new FunctionSeries(chartData.Function, chartData.MinXValue, chartData.MaxXValue, chartData.RadIncrement));
+
+                    this.ChartModel.InvalidatePlot(true);
+
+                    return ChartErrorCode.ok;
+                }
+                else if (string.IsNullOrEmpty(name))
+                {
+                    return ChartErrorCode.chartNameIsNull;
+                }
+                else if (chartData == null)
+                {
+                    return ChartErrorCode.chartDataIsNull;
+                }
+                else
+                {
+                    return ChartErrorCode.none;
+                }
+            }
+            else
+            {
+                return ChartErrorCode.chartModelIsNull;
+            }
             
-            this.ChartModel.InvalidatePlot(true);
         }
     }
 }

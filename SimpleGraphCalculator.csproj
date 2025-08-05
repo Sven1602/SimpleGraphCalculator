@@ -114,8 +114,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LibrarySimpleGraphCalculator\LibrarySimpleGraphCalculator.csproj">
-      <Project>{ce64b31f-c2ec-48b5-9e6d-d027c06b9df6}</Project>
+    <ProjectReference Include="LibrarySimpleGraphCalculator\LibrarySimpleGraphCalculator.csproj">
+      <Project>{CE64B31F-C2EC-48B5-9E6D-D027C06B9DF6}</Project>
       <Name>LibrarySimpleGraphCalculator</Name>
     </ProjectReference>
   </ItemGroup>
