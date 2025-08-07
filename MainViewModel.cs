@@ -1,14 +1,12 @@
-﻿using OxyPlot;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Windows;
-using SimpleGraphCalculator;
 using System.Linq;
 using System;
 using LibrarySimpleGraphCalculator;
 
-namespace CsvImportReview
+namespace SimpleGraphCalculator
 {
     public class MainViewModel : ViewModelBase
     {
@@ -43,45 +41,24 @@ namespace CsvImportReview
             StoreData storeDatas = this.LoadDatas(FilePath);
 
             if(storeDatas != null)
-            {   
-                XValue = storeDatas.XValue;
+            {
                 CurrentFunctionName = storeDatas.Name;
+                CurrentUnit = storeDatas.CurrentUnit;
+                XValue = storeDatas.XValue;
                 FunctionValue = storeDatas.FunctionValue;
                 MinXValue = storeDatas.MinXValue;
                 MaxXValue = storeDatas.MaxXValue;
                 IncrementRad = storeDatas.IncrementRad;
-                CurrentUnit = storeDatas.CurrentUnit;
             }
             else
             { // Default Values
                 CurrentFunctionName = FunctionNames.First();
-                XValue = 90;
+                CurrentUnit = Units[(short)EnumParameter.Deg];
                 MinXValue = -10;
                 MaxXValue = 10;
                 IncrementRad = 0.1;
-                CurrentUnit = Units[(short)EnumParameter.Deg];
             }
           
-
-            /*
-            this.ChartModel = new PlotModel { Title = "Functions", IsLegendVisible = true };
-            this.ChartModel.Legends.Add(new Legend
-            {
-                LegendBackground = OxyColor.FromAColor(220, OxyColors.White),
-                LegendBorder = OxyColors.Black,
-                LegendBorderThickness = 1.0,
-                LegendPlacement = LegendPlacement.Outside,
-                LegendPosition = LegendPosition.BottomLeft,
-                LegendOrientation = LegendOrientation.Horizontal,
-                LegendLineSpacing = 8,
-                LegendMaxWidth = 1000,
-                LegendFontSize = 12
-            });
-            */
-            //this.ChartModel.Series.Add(new FunctionSeries(Calculator.Cos, -10, 10, 0.1, "cos(x)"));
-
-            //this.ChartModel.Series.Add(new FunctionSeries(Calculator.Cos, -10, 10, 0.1, "cos(x)"));
-            //this.ChartModel.Series.Add(new FunctionSeries(Calculator.Sinc, -10, 10, 0.1, "Sinc(x)"));
             updateChart = true;
             UpdateChart();
         }
@@ -106,6 +83,8 @@ namespace CsvImportReview
                 if (value != null)
                 {
                     currentUnit = value;
+                    FunctionValue = 0;
+                    XValue = 0;
                     OnPropertyChanged(nameof(CurrentUnit));
                 }
             }
@@ -119,7 +98,6 @@ namespace CsvImportReview
             }
         }
 
-        
         public IChartManager ChartManager
         {
             get => chartManager;
@@ -141,6 +119,7 @@ namespace CsvImportReview
                     {
                         currentFunctionObject = this.GetAvailableFunctions().Select(x => x.Item1).FirstOrDefault(x => x.Name == currentFunctionName);
                     }
+                    FunctionValue = 0;
                     UpdateChart();
                     OnPropertyChanged(nameof(CurrentFunctionName));
                 }
@@ -271,11 +250,6 @@ namespace CsvImportReview
                         RadIncrement = IncrementRad
                     };
 
-                    //this.ChartModel.Series.Clear();
-                    //this.ChartModel.Series.Add(new FunctionSeries(Calculator.Sinc, -10, 10, 0.1, "Sinc(x)"));
-                    //this.ChartModel.InvalidatePlot(true);
-
-                    //this.ChartModel.Series.Add(new FunctionSeries(chartData.Function, chartData.MinXValue, chartData.MaxXValue, chartData.RadIncrement));
                     chartManager.UpdateChart(CurrentFunctionName, chartData);
                     SaveDatas();
                 }

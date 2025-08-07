@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace CsvImportReview
+namespace SimpleGraphCalculator
 {
     public class RelayCommand : ICommand
     {

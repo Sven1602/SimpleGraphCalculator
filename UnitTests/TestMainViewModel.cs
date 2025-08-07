@@ -1,6 +1,6 @@
-﻿using CsvImportReview;
-using LibrarySimpleGraphCalculator;
+﻿using LibrarySimpleGraphCalculator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SimpleGraphCalculator;
 using System.IO;
 
 namespace TestSimpleGraphCalculator
@@ -29,7 +29,7 @@ namespace TestSimpleGraphCalculator
         {
             MainViewModel mainViewModel = new MainViewModel();
             Assert.IsTrue(mainViewModel.CurrentFunctionName == new Sin().Name);
-            Assert.IsTrue(mainViewModel.XValue == 90);
+            Assert.IsTrue(mainViewModel.XValue == 0);
             Assert.IsTrue(mainViewModel.MinXValue == -10);
             Assert.IsTrue(mainViewModel.MaxXValue == 10);
             Assert.IsTrue(mainViewModel.IncrementRad == 0.1);
@@ -44,10 +44,11 @@ namespace TestSimpleGraphCalculator
             File.Delete(filePath);
 
             StoreData expected = new StoreData();
+            expected.CurrentUnit = EnumParameter.Rad.ToString();
             expected.XValue = 1.5;
             expected.MaxXValue = 10;
             expected.MinXValue = 0;
-            expected.CurrentUnit = EnumParameter.Rad.ToString();
+           
             expected.IncrementRad = 0.2;
             expected.Name = new Cos().Name;
             IDataManager dataManager = new DataManager();
@@ -69,8 +70,8 @@ namespace TestSimpleGraphCalculator
         {
             MainViewModel mainViewModel = new MainViewModel();
             mainViewModel.CurrentFunctionName = new Sin().Name;
-            mainViewModel.XValue = 90;
             mainViewModel.CurrentUnit = EnumParameter.Deg.ToString();
+            mainViewModel.XValue = 90;
 
             Assert.IsTrue(0 == mainViewModel.FunctionValue);
             mainViewModel.CalcCommand.Execute(null);
